@@ -142,12 +142,14 @@ class CefBrowser(Widget):
             # This directories must be set on Linux
             "locales_dir_path": cefpython.GetModuleDirectory()+"/locales",
             "resources_dir_path": cefpython.GetModuleDirectory(),
-            "browser_subprocess_path": "%s/%s" % (cefpython.GetModuleDirectory(), "subprocess")}
+            "browser_subprocess_path": "%s/%s" % (cefpython.GetModuleDirectory(), "subprocess"),
+			"remote_debugging_port": "9222",
+
+			}
 
         switches = {
 		# "proxy-server": "socks5://127.0.0.1:8888",
 		# "enable-media-stream": "",
-		"remote-debugging-port": "9222"	
 		}
 
         #start idle

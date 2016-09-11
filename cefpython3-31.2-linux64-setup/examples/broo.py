@@ -38,18 +38,19 @@ class CefBrowser(object):
 		#configure cef
 		settings = {
 			"debug": True, # cefpython debug messages in console and in log_file
-			"log_severity": cefpython.LOGSEVERITY_INFO,
+			"log_severity": cefpython.LOGSEVERITY_VERBOSE,
 			"log_file": "debug.log",
 			"release_dcheck_enabled": True, # Enable only when debugging.
 			# This directories must be set on Linux
 			"locales_dir_path": cefpython.GetModuleDirectory()+"/locales",
 			"resources_dir_path": cefpython.GetModuleDirectory(),
-			"browser_subprocess_path": "%s/%s" % (cefpython.GetModuleDirectory(), "subprocess")
+			"browser_subprocess_path": "%s/%s" % (cefpython.GetModuleDirectory(), "subprocess"),
+			"remote_debugging_port": "9222",	
+			#  "windowless_rendering_enabled": True,
 		}
 		switches = {
 		# "proxy-server": "socks5://127.0.0.1:8888",
 		# "enable-media-stream": "",
-		"remote-debugging-port": "9222"	
 		}
 
 		#start idle
@@ -60,7 +61,7 @@ class CefBrowser(object):
 
 		#WindowInfo offscreen flag
 		windowInfo = cefpython.WindowInfo()
-		windowInfo.SetAsOffscreen(0)
+		windowInfo.SetAsOffscreen(1)
 
 		#Create Broswer and naviagte to empty page <= OnPaint won't get called yet
 		browserSettings = {}
@@ -91,6 +92,7 @@ class CefBrowser(object):
 
 		# The browserWidget instance is required in OnLoadingStateChange().
 		self.browser.SetUserData("browserWidget", self)
+		cefpython.MessageLoop()
 		
 		
 		# Clock.schedule_once(self.change_url, 5)
@@ -121,3 +123,9 @@ class ClientHandler:
 
 	def __init__(self, browserWidget):
 		self.browserWidget = browserWidget
+
+
+cb = CefBrowser()
+cb.start_cef()
+b = cb.browser		
+

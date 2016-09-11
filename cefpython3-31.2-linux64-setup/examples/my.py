@@ -8,6 +8,8 @@ windowInfo.SetTransparentPainting(True)
 browserSettings = {}
 url = "http://www.google.com"
 
-b = cefpython.CreateBrowser(windowInfo,
+cefpython.Initialize(browserSettings, {})
+
+b = cefpython.CreateBrowserSync(windowInfo,
 							    browserSettings={},
 								navigateUrl=url)

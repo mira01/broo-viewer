@@ -7,10 +7,10 @@ Chrome(function (chrome) {
 			DOM.getOuterHTML({nodeId: resp.root.nodeId}, function(err, resp){
 				console.log(resp.outerHTML);
 			});
-			Page.captureScreenshot({}, function(err, resp){
-				console.log(resp.data);
-				console.log(err);
-			});
+			//Page.captureScreenshot({}, function(err, resp){
+			//	console.log(resp.data);
+			//	console.log(err);
+			//});
 		});
 	});
         Network.enable();
