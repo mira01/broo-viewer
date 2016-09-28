@@ -33,16 +33,18 @@ class ClientHandler:
         self.screenshot_fpath = screenshot_fpath
 
     def OnPaint(self, browser, paintElementType, dirtyRects, buffer, width, height):
+        self.height = height
         if paintElementType == cefpython.PET_POPUP:
             print("width=%s, height=%s" % (width, height))
         elif paintElementType == cefpython.PET_VIEW:
+            browser.GetMainFrame().ExecuteJavascript('''document.body.style.background = "#ff00cc";''')
             self.image = buffer.GetString(mode="rgba", origin="top-left")
         else:
             raise Exception("Unknown paintElementType: %s" % paintElementType)
 
     def GetViewRect(self, browser, rect):
         width = self.width
-        height = self.height
+        #height = self.height
         rect.append(0)
         rect.append(0)
         rect.append(width)
