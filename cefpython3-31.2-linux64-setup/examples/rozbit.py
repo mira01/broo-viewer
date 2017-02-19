@@ -75,7 +75,7 @@ class CefBrowser(Widget):
 
     '''Represent a browser widget for kivy, which can be used like a normal widget.
     '''
-    def __init__(self, start_url='http://www.google.com/', **kwargs):
+    def __init__(self, start_url='http://thinkpad/', **kwargs):
         super(CefBrowser, self).__init__(**kwargs)
 
         self.start_url = start_url

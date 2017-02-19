@@ -9,7 +9,6 @@ browserSettings = {}
 url = "http://www.google.com"
 
 cefpython.Initialize(browserSettings, {})
-
-b = cefpython.CreateBrowserSync(windowInfo,
-							    browserSettings={},
-								navigateUrl=url)
+b = cefpython.CreateBrowserSync(
+        windowInfo, browserSettings={}, navigateUrl=url
+)
