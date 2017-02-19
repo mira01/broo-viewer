@@ -4,14 +4,16 @@ import threading, time
 import os
 import sys
 from PIL import Image
+import datetime
 
-from logging import getLogger
-log = getLogger('mirecek')
+import logging
+logging.basicConfig()
+log = logging.getLogger('mirecek')
 
 class BrowserInitializer(object):
     def __init__(self, width=512, height=512, capabilities=None):
         cefpython.g_debug = True
-        settings = {
+        application_settings = {
             "log_severity": cefpython.LOGSEVERITY_INFO, # LOGSEVERITY_VERBOSE
             #"log_file": cefpython.GetApplicationPath("debug.log"), # Set to "" to disable.
             "release_dcheck_enabled": True, # Enable only when debugging.
@@ -21,21 +23,40 @@ class BrowserInitializer(object):
             #"multi_threaded_message_loop": False,
             #"remote_debugging_port": 8080,
             "browser_subprocess_path": "%s/%s" % (
-                cefpython.GetModuleDirectory(), "subprocess")
+                cefpython.GetModuleDirectory(), "subprocess"),
+            # nefunguje"disable_blink_features": "CSSIndependentTransformProperties",
         }
-        cefpython.Initialize(settings)
+        cli_switches = {
+            # "enable-blink-features": 'CSSMotionPath',
+            "enable-blink-features": "CSS3TextDecorations,CSSBackDropFilter",
+        }
+        cefpython.Initialize(application_settings, cli_switches)
 
         windowInfo = cefpython.WindowInfo()
         windowInfo.SetAsOffscreen(0)
-        browserSettings = {}
+        browserSettings = {
+            "local_storage_disabled": True,
+        }
         self.browser = cefpython.CreateBrowserSync(windowInfo, browserSettings,
-                "http://localhost/")
+                "http://localhost/transform.html")
         self.browser.SendFocusEvent(True)
         #set_js_bindings(browser)
         self.client_handler = ClientHandler(
                 self.browser, width, height, "screenshot.png"
                 )
         self.browser.SetClientHandler(self.client_handler)
+
+        self.bind()
+
+    def bind(self):
+        jsBindings = cefpython.JavascriptBindings(
+            bindToFrames=True, bindToPopups=True
+        )
+        jsBindings.SetObject("localStorage", False)
+        jsBindings.SetObject("Neexistujici", False)
+        jsBindings.SetObject("python", BindObject(self.browser))
+        self.browser.SetJavascriptBindings(jsBindings)
+        self.browser.javascriptBindings.Rebind()
 
     def screenshoot(self, page, width=512, height=512):
         try:
@@ -65,10 +86,16 @@ class ClientHandler:
         self.screenshot_fpath = screenshot_fpath
 
     def OnPaint(self, browser, paintElementType, dirtyRects, buffer, width, height):
+        log.error("time OnPaint zavolano %s", datetime.datetime.now())
         if paintElementType == cefpython.PET_POPUP:
             pass
         elif paintElementType == cefpython.PET_VIEW:
-            self.image = buffer.GetString(mode="rgba", origin="top-left")
+            self_image = buffer.GetString(mode="rgba", origin="top-left")
+            image = Image.frombytes(
+                "RGBA", (self.width, self.height), self_image, "raw", "RGBA", 0, 1
+            )
+            image.save(self.screenshot_fpath, "PNG")
+            cefpython.QuitMessageLoop()
         else:
             raise Exception("Unknown paintElementType: %s" % paintElementType)
 
@@ -86,16 +113,13 @@ class ClientHandler:
 #        print("GetScreenPoint()")
 #        return False
 #
-#    def OnLoadStart(self, browser, frame):
-#        print("\nOnLoadStart")
-#        pass
+    def OnLoadStart(self, browser, frame):
+        print("LoadStart")
+        frame.ExecuteJavascript("delete localStorage;");
 
     def OnLoadEnd(self, browser, frame, httpStatusCode):
-        image = Image.frombytes(
-            "RGBA", (self.width, self.height), self.image, "raw", "RGBA", 0, 1
-        )
-        image.save(self.screenshot_fpath, "PNG")
-        cefpython.QuitMessageLoop()
+        log.error("time OnLoadEnd zavolano %s", datetime.datetime.now())
+        #cefpython.QuitMessageLoop()
 
 #    def OnLoadError(self, browser, frame, errorCode, errorText, failedURL):
 #        print("load error", browser, frame, errorCode, errorText, failedURL)
@@ -115,6 +139,6 @@ def set_js_bindings(browser):
             bindToFrames=True,
             bindToPopups=True
     )
-    jsBindings.SetObject("window", BindObject(browser))
+    jsBindings.SetObject("python", BindObject(browser))
     browser.SetJavascriptBindings(jsBindings)
 
