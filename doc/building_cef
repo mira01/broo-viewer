@@ -1,0 +1,43 @@
+cd ~/git
+sudo apt-get install python-dev cmake g++ libgtk2.0-dev
+wget https://github.com/ninja-build/ninja/releases/download/v1.7.1/ninja-linux.zip
+unzip ninja-linux.zip
+cp ninja /usr/bin
+chmod 775 /usr/bin/ninja
+mkdir mycef
+cd mycef
+mkdir code
+cd code
+curl 'https://chromium.googlesource.com/chromium/src/+/master/build/install-build-deps.sh?format=TEXT' | base64 -d > install-build-deps.sh
+chmod 777 install-build-deps.sh
+./install-build-deps.sh  # nechci debugging symbols
+apt-get install libgtkglext1-dev
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+export PATH=`pwd`/depot_tools:$PATH
+mkdir automate
+cd automate
+wget https://bitbucket.org/chromiumembedded/cef/raw/master/tools/automate/automate-git.py
+cd ..
+mkdir chromium_git/
+echo '#!/bin/bash' > chromium_git/update.sh
+echo 'export CEF_USE_GN=1' >> chromium_git/update.sh
+echo "python `pwd`/automate/automate-git.py --download-dir=`pwd`/chromium_git --depot-tools-dir=`pwd`/depot_tools --no-distrib --no-build" >> chromium_git/update.sh
+chmod 755 chromium_git/update.sh
+cd chromium_git
+./update.sh
+cd chromium/src/cef
+echo '#!/bin/bash' > create.sh
+echo 'export CEF_USE_GN=1' >> create.sh
+echo './cef_create_projects.sh'
+chmod 755 create.sh
+./create.sh
+cd ~/git/mycef/code/chromium_git/chromium/src/third_party/WebKit/Source/core/css
+cp CSSProperties.in ~/git/mycef
+cd ~/git/mycef
+# uprav co je treba
+
+cd code/chromium_git/chromium/src
+mkdir out/Debug_GN_x64
+ninja -C out/Debug_GN_x64 cef chrome_sandbox
+
+
