@@ -8,14 +8,26 @@ import sys
 def get_switches():
    return {
     "enable-blink-features": 'CSSBoxShadow',
-    #"enable-blink-features": "CSS3TextDecorations,CSSBackDropFilter",
     }
 
 def main():
     check_versions()
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     cef.Initialize({}, get_switches())
-    cef.CreateBrowserSync(url="http://localhost/box-shadow.html")
+
+   #
+
+    windowInfo = cef.WindowInfo()
+    windowInfo.SetAsOffscreen(0)
+    browserSettings = {
+        "local_storage_disabled": True,
+    }
+    browser = cef.CreateBrowserSync(windowInfo, browserSettings,
+            "http://localhost/transform.html")
+    browser.SendFocusEvent(True)
+   #
+
+    #cef.CreateBrowserSync(url="http://localhost/box-shadow.html")
     cef.MessageLoop()
     cef.Shutdown()
 
