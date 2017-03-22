@@ -1,0 +1,88 @@
+diff --git WebKit/Source/core/css/CSSProperties.in WebKit/Source/core/css/CSSProperties.in
+index 3699186..b13b9fe 100644
+--- WebKit/Source/core/css/CSSProperties.in
++++ WebKit/Source/core/css/CSSProperties.in
+@@ -171,7 +171,7 @@ background-position-x interpolable, custom_all
+ background-position-y interpolable, custom_all
+ background-repeat-x custom_all
+ background-repeat-y custom_all
+-background-size interpolable, custom_all
++background-size interpolable, custom_all, runtime_flag=CSSBackgroundSize
+ baseline-shift interpolable, svg, custom_inherit, custom_value
+ border-bottom-color interpolable, custom_all
+ border-bottom-left-radius interpolable, initial=initialBorderRadius, converter=convertRadius
+@@ -196,7 +196,7 @@ border-top-right-radius interpolable, initial=initialBorderRadius, converter=con
+ border-top-style type_name=EBorderStyle, initial=initialBorderStyle
+ border-top-width interpolable, initial=initialBorderWidth, converter=convertLineWidth<unsigned>, typedom_types=[Length], keywords=[thin|medium|thick], supports_percentage
+ bottom typedom_types=[Length], keywords=[auto], supports_percentage, interpolable, initial=initialOffset, converter=convertLengthOrAuto
+-box-shadow interpolable, converter=convertShadow
++box-shadow interpolable, runtime_flag=CSSBoxShadow, converter=convertShadow
+ box-sizing
+ break-after type_name=EBreak
+ break-before type_name=EBreak
+@@ -287,7 +287,7 @@ offset-path converter=convertPathOrNone
+ offset-position runtime_flag=CSSOffsetPositionAnchor, interpolable, converter=convertPositionOrAuto
+ offset-rotate runtime_flag=CSSOffsetRotate, interpolable, converter=convertOffsetRotation
+ offset-rotation runtime_flag=CSSOffsetRotation, interpolable, converter=convertOffsetRotation
+-opacity interpolable, type_name=float
++opacity interpolable, runtime_flag=CSSOpacity, type_name=float
+ order type_name=int
+ orphans interpolable, inherited, type_name=short
+ outline-color interpolable, custom_all
+@@ -351,7 +351,7 @@ text-decoration-style runtime_flag=CSS3TextDecorations, type_name=TextDecoration
+ text-indent interpolable, inherited, custom_all
+ text-justify runtime_flag=CSS3Text, inherited, type_name=TextJustify
+ text-overflow type_name=TextOverflow
+-text-shadow interpolable, inherited, converter=convertShadow
++text-shadow interpolable, runtime_flag=CSSTextShadow, inherited, converter=convertShadow
+ text-size-adjust inherited, converter=convertTextSizeAdjust, type_name=TextSizeAdjust
+ text-transform inherited
+ text-underline-position runtime_flag=CSS3TextDecorations, inherited, type_name=TextUnderlinePosition
+@@ -439,10 +439,10 @@ white-space inherited
+ widows interpolable, inherited, type_name=short
+ width interpolable, initial=initialSize, converter=convertLengthSizing, typedom_types=[Length], keywords=[auto], supports_percentage
+ will-change custom_all
+-word-break inherited
++word-break inherited, runtime_flag=CSSWordBreak
+ word-spacing interpolable, inherited, initial=initialLetterWordSpacing, converter=convertSpacing
+ // UAs must treat 'word-wrap' as an alternate name for the 'overflow-wrap' property. So using the same handlers.
+-word-wrap inherited, name_for_methods=OverflowWrap
++word-wrap inherited, runtime_flag=CSSWordWrap, name_for_methods=OverflowWrap
+ z-index interpolable, type_name=int, custom_all
+ 
+ // Non-standard direction aware properties
+@@ -501,7 +501,7 @@ background-repeat longhands=background-repeat-x;background-repeat-y
+ border longhands=border-top-color;border-top-style;border-top-width;border-right-color;border-right-style;border-right-width;border-bottom-color;border-bottom-style;border-bottom-width;border-left-color;border-left-style;border-left-width;border-image-source;border-image-slice;border-image-width;border-image-outset;border-image-repeat
+ border-bottom longhands=border-bottom-width;border-bottom-style;border-bottom-color
+ border-color longhands=border-top-color;border-right-color;border-bottom-color;border-left-color
+-border-image longhands=border-image-source;border-image-slice;border-image-width;border-image-outset;border-image-repeat
++border-image longhands=border-image-source;border-image-slice;border-image-width;border-image-outset;border-image-repeat, runtime_flag=CSSBorderImage
+ border-left longhands=border-left-width;border-left-style;border-left-color
+ border-radius longhands=border-top-left-radius;border-top-right-radius;border-bottom-right-radius;border-bottom-left-radius
+ border-right longhands=border-right-width;border-right-style;border-right-color
+diff --git WebKit/Source/platform/RuntimeEnabledFeatures.in WebKit/Source/platform/RuntimeEnabledFeatures.in
+index 2e95580..af567c6 100644
+--- WebKit/Source/platform/RuntimeEnabledFeatures.in
++++ WebKit/Source/platform/RuntimeEnabledFeatures.in
+@@ -60,7 +60,7 @@ CSSFontDisplay status=experimental
+ CSSFontSizeAdjust status=experimental
+ CSSGridLayout status=experimental, settable_from_internals=True
+ CSSDisplayContents status=experimental
+-CSSHyphens status=stable
++CSSHyphens status=experimental
+ CSSInBodyDoesNotBlockPaint status=experimental
+ CSSIndependentTransformProperties status=experimental
+ CSSMaskSourceType status=experimental
+@@ -272,3 +272,12 @@ Worklet status=experimental
+ LazyParseCSS status=experimental
+ ParseHTMLOnMainThread status=test
+ SendBeaconThrowForBlobWithNonSimpleType status=experimental
++
++/// moje
++CSSWordBreak status=experimental
++CSSWordWrap status=experimental
++CSSBackgroundSize status=experimental
++CSSBorderImage status=experimental
++CSSOpacity status=experimental
++CSSBoxShadow status=experimental
++CSSTextShadow status=experimental
