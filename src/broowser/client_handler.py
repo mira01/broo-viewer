@@ -63,5 +63,5 @@ class ClientHandler:
 
     def OnLoadEnd(self, browser, frame, *args, **kwargs):
         log.error("time OnLoadEnd zavolano %s", datetime.datetime.now())
-        cef.QuitMessageLoop()
+        # cef.QuitMessageLoop()
 
