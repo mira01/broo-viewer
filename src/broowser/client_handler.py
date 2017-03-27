@@ -46,19 +46,13 @@ class ClientHandler:
     def GetViewRect(self, browser, rect_out, *args, **kwargs):
         rect_out.append(0)
         rect_out.append(0)
-        rect_out.append(400)
-        rect_out.append(400)
+        rect_out.append(self.width)
+        rect_out.append(self.height)
         return True
-#        width = self.width
-#        height = self.height
-#        rect.append(0)
-#        rect.append(0)
-#        rect.append(width)
-#        rect.append(height)
-#        print("\nGetViewRect")
-#        return True
 
-    def GetScreenPoint(self, browser, viewX, viewY, screenCoordinates):
+    def GetScreenPoint(self, browser, view_x, view_y, screen_coordinates_out):
+        if screen_coordinates_out:
+            return True
         return False
 #        print("GetScreenPoint()")
 #        return False

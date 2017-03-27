@@ -1,7 +1,7 @@
 import requests
 
 KNOWN_CAPABILITIES = {
-    "css.wordWrap": "CSSWordWrap"
+    "css.wordWrap": "CSSWordWrap",
     "css.wordBreak": "CSSWordBreak",
     "css.backgroundSize": "CSSBackgroundSize",
     "css.borderImage": "CSSBorderImage",
@@ -27,8 +27,22 @@ class PropertiesFetcher(object):
 
     def get_enabled_capabilities(self, capabilities=None):
         return [
-            cp for cp, enabled in capabilities
-            if enabled == "1" and cp in self.known_capabilities.iterkeys()
+            cp for cp, enabled in capabilities.iteritems()
+            if enabled == "1" and cp in KNOWN_CAPABILITIES.iterkeys()
         ]
+
+    def get_display_dimensions(self, capabilities=None):
+        return (
+            capabilities.get('display.width'),
+            capabilities.get('display.height'),
+            capabilities.get('display.dpi'),
+        )
+
+    def get_blink_switches(self, capabilities=None):
+        return ",".join(
+            KNOWN_CAPABILITIES[cap] for cap in
+            self.get_enabled_capabilities(capabilities)
+        )
+
 
 
