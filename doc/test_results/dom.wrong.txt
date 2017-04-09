@@ -1,5 +1,3 @@
-(300, 300, <type 'int'>, <type 'int'>)
-LoadStart
 <html><head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
@@ -16,21 +14,3 @@ LoadStart
 
 
 </body></html>
-LoadStart
-<html><head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <script>
-        window.localStorage.setItem("a", "localStorage funguje")
-        document.write("<h1>" + window.localStorage.getItem("a") + "</h1>")
-        document.write("<h1>pokracujeme dale</h1>")
-    </script>
-    <script>
-        document.write("<h1>Pokračujeme dále</h1>")
-    </script><h1>Pokračujeme dále</h1>
-  
-
-
-</body></html>
-called shutdown
