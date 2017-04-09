@@ -1,0 +1,49 @@
+</body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<style> 
+body{
+    background-color: #ccf;
+}
+div {
+    position: absolute;
+    top: 200px;
+    left: 0;
+    font-size: 1.5em;
+    text-shadow: 5px 5px 0px black;
+    word-wrap: break-word;
+}
+.bottom {
+    width: 200px;
+    height: 100px;
+    background: url(background.jpg);
+    background-size: 30px 30px;
+    padding: 15px;
+    border: 10px solid transparent;
+    border-image: url(border.png) 30 round;
+    box-shadow: 30px 30px 1px #000;
+}
+.upper {
+    background-color: red;
+    opacity: 0.8;
+    width: 100px;
+    height: 200px;
+}
+</style>
+</head>
+<body>
+
+<div class="bottom">div dole, div dole, div dole</div>
+<div class="upper">div nahore<br /> div nahore</div>
+<script>
+    window.localStorage.setItem("a", "localStorage funguje")
+    document.write("<h1>" + window.localStorage.getItem("a") + "</h1>")
+    document.write("<h1>To je dobře</h1>")
+</script>
+<script>
+    document.write("<h1>Pokračujeme dále</h1>")
+</script>
+</body>
+</html>
+
