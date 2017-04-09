@@ -55,7 +55,7 @@ class BrowserInitializer(object):
         )
         jsBindings.SetObject("localStorage", False)
         jsBindings.SetObject("Neexistujici", False)
-        jsBindings.SetObject("python", BindObject(self.browser))
+        # jsBindings.SetObject("python", BindObject(self.browser))
         self.browser.SetJavascriptBindings(jsBindings)
         self.browser.javascriptBindings.Rebind()
 

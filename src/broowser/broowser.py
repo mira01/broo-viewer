@@ -12,6 +12,16 @@ from properties_fetcher import PropertiesFetcher
 sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
 
 
+def func():
+    return "undefined"
+
+
+class BindObject(object):
+
+    def move(self, whatever):
+        print(whatever)
+
+
 class Broowser(object):
 
     def application_settings(self):
@@ -19,7 +29,10 @@ class Broowser(object):
 
     def cli_switches(self, user_agent):
         blink_switches = self.pf.get_blink_switches(self.capabilities)
-        return {"enable-blink-features": blink_switches}
+        cli_switches = {"enable-blink-features": blink_switches}
+        if not self.pf.get_localStorage(self.capabilities):
+            cli_switches['disable-local-storage'] = ""
+        return cli_switches
 
     def browser_settings(self):
         return {}
@@ -50,6 +63,16 @@ class Broowser(object):
             "screenshot.png"
         )
         self.browser.SetClientHandler(self.client_handler)
+
+        # js binding
+        jsBindings = cef.JavascriptBindings(
+            bindToFrames=False, bindToPopups=False
+        )
+        jsBindings.SetObject("python", BindObject())
+        self.browser.SetJavascriptBindings(jsBindings)
+        self.browser.javascriptBindings.Rebind()
+        # end jsbinding
+
         self.browser.SendFocusEvent(True)
 
     def screenshot(self, url):

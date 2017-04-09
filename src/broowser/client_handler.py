@@ -59,9 +59,10 @@ class ClientHandler:
 #
     def OnLoadStart(self, browser, frame):
         print("LoadStart")
-        frame.ExecuteJavascript("delete localStorage;");
+        #frame.ExecuteJavascript("delete localStorage;");
 
     def OnLoadEnd(self, browser, frame, *args, **kwargs):
         log.error("time OnLoadEnd zavolano %s", datetime.datetime.now())
+        frame.ExecuteJavascript("python.move(window.document.getRootNode().documentElement.outerHTML)")
         # cef.QuitMessageLoop()
 

@@ -20,10 +20,7 @@ class PropertiesFetcher(object):
 
 
     def load_capabilities(self, user_agent=None):
-        r = requests.get(
-            self.broo_address, headers={'user-agent': user_agent}
-        )
-        return r.json()['capabilities']
+        return {}
 
     def get_enabled_capabilities(self, capabilities=None):
         return [
@@ -32,18 +29,12 @@ class PropertiesFetcher(object):
         ]
 
     def get_display_dimensions(self, capabilities=None):
-        return (
-            capabilities.get('display.width'),
-            capabilities.get('display.height'),
-            capabilities.get('display.dpi'),
-        )
+        return (300, 300, 300)
 
     def get_blink_switches(self, capabilities=None):
-        return ",".join(
-            KNOWN_CAPABILITIES[cap] for cap in
-            self.get_enabled_capabilities(capabilities)
-        )
+        return ""
 
     def get_localStorage(self, capabilities=None):
-        return capabilities.get('js.localstorage') == "1"
+        return False
+
 
