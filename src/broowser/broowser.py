@@ -41,7 +41,8 @@ class Broowser(object):
         return {}
 
 
-    def __init__(self, user_agent, display_dimensions=None, stringio=None):
+    def __init__(self, user_agent, display_dimensions=None, stringio=None,
+            io=None):
         """
         if display_dimmensions tuple(width, height, dpi) is set
         it will overwrite respective values taken from broo
@@ -53,9 +54,6 @@ class Broowser(object):
         self.width = int(display_dimensions[0])
         self.height = int(display_dimensions[1])
 
-
-        print(self.width, self.height, type(self.width), type(self.height))
-
         cef.Initialize(
             self.application_settings(), self.cli_switches(user_agent)
         )
@@ -64,7 +62,7 @@ class Broowser(object):
 
         self.browser = cef.CreateBrowserSync(windowInfo, self.browser_settings())
         self.client_handler = ClientHandler(self.browser, self.width, self.height,
-            "screenshot.png"
+            "screenshot.png", io
         )
         self.browser.SetClientHandler(self.client_handler)
 
