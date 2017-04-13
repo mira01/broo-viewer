@@ -18,8 +18,11 @@ def func():
 
 class BindObject(object):
 
+    def __init__(self, stringio):
+        self.stringio = stringio
+
     def move(self, whatever):
-        print(whatever)
+        self.stringio.write(whatever)
 
 
 class Broowser(object):
@@ -38,7 +41,7 @@ class Broowser(object):
         return {}
 
 
-    def __init__(self, user_agent, display_dimensions=None):
+    def __init__(self, user_agent, display_dimensions=None, stringio=None):
         """
         if display_dimmensions tuple(width, height, dpi) is set
         it will overwrite respective values taken from broo
@@ -49,6 +52,7 @@ class Broowser(object):
             display_dimensions = self.pf.get_display_dimensions(self.capabilities)
         self.width = int(display_dimensions[0])
         self.height = int(display_dimensions[1])
+
 
         print(self.width, self.height, type(self.width), type(self.height))
 
@@ -68,7 +72,7 @@ class Broowser(object):
         jsBindings = cef.JavascriptBindings(
             bindToFrames=False, bindToPopups=False
         )
-        jsBindings.SetObject("python", BindObject())
+        jsBindings.SetObject("python", BindObject(stringio))
         self.browser.SetJavascriptBindings(jsBindings)
         self.browser.javascriptBindings.Rebind()
         # end jsbinding
