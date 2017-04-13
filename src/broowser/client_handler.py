@@ -30,6 +30,7 @@ class ClientHandler:
             height=None,
             width=None,
             element_type=None, **kwargs):
+        print("Paint")
         if element_type == cef.PET_POPUP:
             pass
         elif element_type == cef.PET_VIEW:
@@ -59,6 +60,7 @@ class ClientHandler:
         print("LoadStart")
 
     def OnLoadEnd(self, browser, frame, *args, **kwargs):
+        print("LoadEnd")
         frame.ExecuteJavascript("python.move(window.document.getRootNode().documentElement.outerHTML)")
         # cef.QuitMessageLoop()
 
