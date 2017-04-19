@@ -13,13 +13,14 @@ log = logging.getLogger(__name__)
 
 
 class ClientHandler:
-    """A client handler is required for the browser to do built in callbacks back into the application."""
+    """A client handler is required for the browser
+    to do built in callbacks back into the application.
+    """
 
-    def __init__(self, browser, width, height, screenshot_fpath, io):
+    def __init__(self, browser, width, height, io):
         self.browser = browser
         self.width = width
         self.height = height
-        self.screenshot_fpath = screenshot_fpath
         self.io = io
 
     def OnPaint(
@@ -30,21 +31,19 @@ class ClientHandler:
             height=None,
             width=None,
             element_type=None, **kwargs):
-        print("Paint")
+        """ callback executed when webpage should be painted"""
+        log.debug("Paint")
         if element_type == cef.PET_POPUP:
             pass
         elif element_type == cef.PET_VIEW:
             self_image = paint_buffer.GetString(mode="rgba", origin="top-left")
-#            image = Image.frombytes(
-#                "RGBA", (self.width, self.height), self_image, "raw", "RGBA", 0, 1
-#            )
             self.io.write(self_image)
-#            image.save(self.screenshot_fpath, "PNG")
             cef.QuitMessageLoop()
         else:
             raise Exception("Unknown paintElementType: %s" % paintElementType)
 
     def GetViewRect(self, browser, rect_out, *args, **kwargs):
+        "returns rectangle to repaint. Now implemented as whole display size"
         rect_out.append(0)
         rect_out.append(0)
         rect_out.append(self.width)
@@ -57,10 +56,12 @@ class ClientHandler:
         return False
 
     def OnLoadStart(self, browser, frame):
-        print("LoadStart")
+        "callback executed when loading of webpage starts"
+        log.debug("LoadStart")
 
     def OnLoadEnd(self, browser, frame, *args, **kwargs):
-        print("LoadEnd")
+        "callback executed when loading of webpage ends"
+        log.debug("LoadEnd")
         frame.ExecuteJavascript("python.move(window.document.getRootNode().documentElement.outerHTML)")
         # cef.QuitMessageLoop()
 

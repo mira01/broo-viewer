@@ -1,3 +1,10 @@
+#  Script showing the api of Broo viewer.
+#  Typical usecase is instatniating a Broowser with specified user-agent
+#  and then getting screenshot of specified webpage.
+#  This example gets DOM and prints it to the sys.stdout and
+#  saves rendered image to file system
+
+
 from broowser import Broowser
 import sys, time
 import StringIO

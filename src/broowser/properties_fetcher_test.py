@@ -12,12 +12,11 @@ KNOWN_CAPABILITIES = {
 }
 
 
-class PropertiesFetcher(object):
+class PropertiesFetcherTest(object):
+    "clone of PropertiesFetcher. Used for testing purpose"
 
     def __init__(self, broo_address=None):
         self.broo_address = "http://drb.mopa.cz/info"
-
-
 
     def load_capabilities(self, user_agent=None):
         return {}

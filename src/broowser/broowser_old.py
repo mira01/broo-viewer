@@ -8,9 +8,10 @@ import datetime
 
 import logging
 logging.basicConfig()
-log = logging.getLogger('mirecek')
+log = logging.getLogger(__name__)
 
 class BrowserInitializer(object):
+    "old testing object"
     def __init__(self, width=512, height=512, capabilities=None):
         cefpython.g_debug = True
         application_settings = {
